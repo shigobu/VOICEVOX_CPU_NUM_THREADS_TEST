@@ -103,7 +103,7 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                 {
                     try
                     {
-                        var startInfo = new ProcessStartInfo(enginePath);
+                        var startInfo = new ProcessStartInfo(enginePath, $"--cpu_num_threads={thread}");
                         startInfo.CreateNoWindow = !(showEngineWindowCheckBox.IsChecked ?? false);
                         startInfo.UseShellExecute = false;
 
