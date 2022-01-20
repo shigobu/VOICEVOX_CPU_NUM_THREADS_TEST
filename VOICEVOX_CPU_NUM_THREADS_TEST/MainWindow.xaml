@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VOICEVOX_CPU_NUM_THREADS_TEST"
         mc:Ignorable="d"
-        Title="VOICEVOX CPUスレッド数とパフォーマンス テストツール" Height="400" Width="400" MinHeight="400" MinWidth="400" WindowStartupLocation="CenterScreen">
+        Title="VOICEVOX CPUスレッド数とパフォーマンス テストツール" Height="400" Width="400" MinHeight="400" MinWidth="400" WindowStartupLocation="CenterScreen" Closed="Window_Closed">
     <Grid>
         <DockPanel Margin="3">
             <DockPanel DockPanel.Dock="Top">

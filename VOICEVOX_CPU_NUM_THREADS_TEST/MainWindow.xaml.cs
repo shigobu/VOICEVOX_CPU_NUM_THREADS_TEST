@@ -22,6 +22,11 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// エンジンプロセス
+        /// </summary>
+        Process process = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -43,6 +48,18 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         {
             statusText.Text = status;
             this.Title = status;
+        }
+
+        /// <summary>
+        /// ウィンドウ終了時
+        /// </summary>
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (process != null)
+            {
+                process.Kill();
+                process = null;
+            }
         }
 
         /// <summary>
@@ -83,7 +100,6 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
 
             foreach (int thread in threadList)
             {
-                Process process = null;
                 try
                 {
                     process = Process.Start(enginePath);
@@ -108,6 +124,7 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                     if (process != null)
                     {
                         process.Kill();
+                        process = null;
                     }
                 }
 
