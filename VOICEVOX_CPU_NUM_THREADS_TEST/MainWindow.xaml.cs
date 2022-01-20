@@ -64,19 +64,65 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         /// </summary>
         private async void ExecuteButton_Click(object sender, RoutedEventArgs e)
         {
-            string enginePath = selectedEnginePath.Text;
+            this.IsEnabled = false;
 
-            Process.Start(enginePath);
-
-            int.TryParse(intervalSecondsTextBox.Text, out int interval);
-
-            for (int i = interval; i > 0; i--)
+            string[] testThreadStrArray = testThreadListTextBox.Text.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            List<int> threadList =  new List<int>();
+            foreach (string testThreadStr in testThreadStrArray)
             {
-                SetStatus($"次のテストまであと{i}秒");
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                int.TryParse(testThreadStr, out int thread);
+                threadList.Add(thread);
             }
 
-            SetStatus("テスト開始");
+            string enginePath = selectedEnginePath.Text;
+            if (!System.IO.File.Exists(enginePath))
+            {
+                SetStatus("エンジンが見つかりません。");
+                return;
+            }
+
+            foreach (int thread in threadList)
+            {
+                Process process = null;
+                try
+                {
+                    process = Process.Start(enginePath);
+
+                    int.TryParse(intervalSecondsTextBox.Text, out int interval);
+                    for (int i = interval; i > 0; i--)
+                    {
+                        SetStatus($"次のテストまであと{i}秒");
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
+
+                    SetStatus("テスト開始");
+                    await ExecuteTest();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    if (process != null)
+                    {
+                        process.Kill();
+                    }
+                }
+
+            }
+
+            SetStatus("テスト終了");
+            this.IsEnabled = true;
+        }
+
+        /// <summary>
+        /// テストを実行し、結果を表示します。
+        /// </summary>
+        private async Task ExecuteTest()
+        {
+            await Task.Delay(TimeSpan.FromSeconds(2));
         }
     }
 }

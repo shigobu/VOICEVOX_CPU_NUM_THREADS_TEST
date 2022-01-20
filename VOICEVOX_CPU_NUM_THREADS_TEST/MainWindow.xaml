@@ -18,7 +18,7 @@
                 <TextBox x:Name="maxThreadTextBox" Width="50" Margin="3" TextAlignment="Right"/>
                 <Rectangle Margin="3"/>
                 <TextBlock Text="インターバル(秒)" VerticalAlignment="Center"/>
-                <TextBox x:Name="intervalSecondsTextBox" Text="5" Width="50" Margin="3" TextAlignment="Right"/>
+                <TextBox x:Name="intervalSecondsTextBox" Text="10" Width="50" Margin="3" TextAlignment="Right"/>
             </StackPanel>
             <DockPanel DockPanel.Dock="Top">
                 <TextBlock DockPanel.Dock="Left" Text="試験スレッド数一覧(カンマ区切り)" Margin="3"/>
