@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace VOICEVOX_CPU_NUM_THREADS_TEST
 {
@@ -31,6 +32,39 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
             {
                 testThreadListTextBox.Text += i.ToString() + ",";
             }
+        }
+
+        /// <summary>
+        /// ステータスを変更します
+        /// </summary>
+        /// <param name="status"></param>
+        private void SetStatus(string status)
+        {
+            statusText.Text = status;
+        }
+
+        /// <summary>
+        /// エンジンパスの選択ボタン押下時のイベント
+        /// </summary>
+        private void SelectEnginePathButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "実行ファイル (*.exe)|*.exe";
+            openFileDialog.Title = "VOICEVOXエンジンの選択";
+            if (openFileDialog.ShowDialog() ?? false)
+            {
+                selectedEnginePath.Text = openFileDialog.FileName;
+            }
+        }
+
+        /// <summary>
+        /// 実行ボタンのイベント
+        /// </summary>
+        private void ExecuteButton_Click(object sender, RoutedEventArgs e)
+        {
+            string enginePath = selectedEnginePath.Text;
+
+
         }
     }
 }
