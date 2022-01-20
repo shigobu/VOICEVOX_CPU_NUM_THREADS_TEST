@@ -5,8 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VOICEVOX_CPU_NUM_THREADS_TEST"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="VOICEVOX CPUスレッド数とパフォーマンス テストツール" Width="400" SizeToContent="Height">
     <Grid>
-        
+        <DockPanel Margin="3">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <TextBlock Text="最大スレッド数" VerticalAlignment="Center" Margin="3"/>
+                <TextBox x:Name="maxThreadTextBox" Width="50" Margin="3" TextAlignment="Right"/>
+                <Rectangle Margin="3"/>
+                <TextBlock Text="インターバル(秒)" VerticalAlignment="Center"/>
+                <TextBox x:Name="intervalSecondsTextBox" Text="5" Width="50" Margin="3" TextAlignment="Right"/>
+            </StackPanel>
+            <DockPanel DockPanel.Dock="Top">
+                <TextBlock DockPanel.Dock="Left" Text="試験スレッド数一覧(カンマ区切り)" Margin="3"/>
+                <TextBox x:Name="testThreadListTextBox" Margin="3"/>
+            </DockPanel>
+            <Button x:Name="executeButton" DockPanel.Dock="Top" Content="実行" Margin="3"/>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="3">
+                <TextBlock Text="ステータス: "/>
+                <TextBlock x:Name="statusText"/>
+            </StackPanel>
+            
+            <ListBox Margin="3">
+                
+            </ListBox>
+        </DockPanel>
     </Grid>
 </Window>

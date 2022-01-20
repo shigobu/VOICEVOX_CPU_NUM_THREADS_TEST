@@ -23,6 +23,14 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         public MainWindow()
         {
             InitializeComponent();
+
+            int processorCount = Environment.ProcessorCount;
+            maxThreadTextBox.Text = processorCount.ToString();
+
+            for (int i = 1; i <= processorCount; i++)
+            {
+                testThreadListTextBox.Text += i.ToString() + ",";
+            }
         }
     }
 }
