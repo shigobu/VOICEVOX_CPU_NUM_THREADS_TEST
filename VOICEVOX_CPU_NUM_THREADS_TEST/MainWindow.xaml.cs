@@ -82,56 +82,64 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         private async void ExecuteButton_Click(object sender, RoutedEventArgs e)
         {
             this.IsEnabled = false;
-
-            string[] testThreadStrArray = testThreadListTextBox.Text.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            List<int> threadList =  new List<int>();
-            foreach (string testThreadStr in testThreadStrArray)
+            try
             {
-                int.TryParse(testThreadStr, out int thread);
-                threadList.Add(thread);
-            }
-
-            string enginePath = selectedEnginePath.Text;
-            if (!System.IO.File.Exists(enginePath))
-            {
-                SetStatus("エンジンが見つかりません。");
-                return;
-            }
-
-            foreach (int thread in threadList)
-            {
-                try
+                string[] testThreadStrArray = testThreadListTextBox.Text.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                List<int> threadList = new List<int>();
+                foreach (string testThreadStr in testThreadStrArray)
                 {
-                    process = Process.Start(enginePath);
+                    int.TryParse(testThreadStr, out int thread);
+                    threadList.Add(thread);
+                }
 
-                    int.TryParse(intervalSecondsTextBox.Text, out int interval);
-                    for (int i = interval; i > 0; i--)
+                string enginePath = selectedEnginePath.Text;
+                if (!System.IO.File.Exists(enginePath))
+                {
+                    SetStatus("エンジンが見つかりません。");
+                    return;
+                }
+
+                foreach (int thread in threadList)
+                {
+                    try
                     {
-                        SetStatus($"次のテストまであと{i}秒");
-                        await Task.Delay(TimeSpan.FromSeconds(1));
+                        var startInfo = new ProcessStartInfo(enginePath);
+                        startInfo.CreateNoWindow = !(showEngineWindowCheckBox.IsChecked ?? false);
+                        startInfo.UseShellExecute = false;
+
+                        process = Process.Start(startInfo);
+
+                        int.TryParse(intervalSecondsTextBox.Text, out int interval);
+                        for (int i = interval; i > 0; i--)
+                        {
+                            SetStatus($"次のテストまであと{i}秒");
+                            await Task.Delay(TimeSpan.FromSeconds(1));
+                        }
+
+                        SetStatus("テスト開始");
+                        await ExecuteTest();
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    finally
+                    {
+                        if (process != null)
+                        {
+                            process.Kill();
+                            process = null;
+                        }
                     }
 
-                    SetStatus("テスト開始");
-                    await ExecuteTest();
                 }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    if (process != null)
-                    {
-                        process.Kill();
-                        process = null;
-                    }
-                }
-
+                SetStatus("テスト終了");
             }
-
-            SetStatus("テスト終了");
-            this.IsEnabled = true;
+            finally
+            {
+                this.IsEnabled = true;
+            }
         }
 
         /// <summary>
