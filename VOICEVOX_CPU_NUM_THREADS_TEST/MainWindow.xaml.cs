@@ -31,13 +31,8 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         {
             InitializeComponent();
 
-            int processorCount = Environment.ProcessorCount;
-            maxThreadTextBox.Text = processorCount.ToString();
-
-            for (int i = 1; i <= processorCount; i++)
-            {
-                testThreadListTextBox.Text += i.ToString() + ",";
-            }
+            maxThreadTextBox.Text = Environment.ProcessorCount.ToString();
+            SetTestThreadListFromMax();
         }
 
         /// <summary>
@@ -148,6 +143,31 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         private async Task ExecuteTest()
         {
             await Task.Delay(TimeSpan.FromSeconds(2));
+        }
+
+        /// <summary>
+        /// 最大スレッド数テキストボックスでキーが押されて離された時
+        /// </summary>
+        private void MaxThreadTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                SetTestThreadListFromMax();
+            }
+        }
+
+        /// <summary>
+        /// 最大スレッド数テキストボックスから、テストスレッドリストを作成し、更新します。
+        /// </summary>
+        /// <param name="maxThread"></param>
+        private void SetTestThreadListFromMax()
+        {
+            int.TryParse(maxThreadTextBox.Text, out int maxThread);
+            testThreadListTextBox.Text = "";
+            for (int i = 1; i <= maxThread; i++)
+            {
+                testThreadListTextBox.Text += i.ToString() + ",";
+            }
         }
     }
 }
