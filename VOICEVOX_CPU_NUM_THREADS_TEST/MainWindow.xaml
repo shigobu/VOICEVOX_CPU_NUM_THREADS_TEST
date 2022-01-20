@@ -24,7 +24,7 @@
                 <TextBlock DockPanel.Dock="Left" Text="試験スレッド数一覧(カンマ区切り)" Margin="3"/>
                 <TextBox x:Name="testThreadListTextBox" Margin="3"/>
             </DockPanel>
-            <Button x:Name="executeButton" DockPanel.Dock="Top" Content="実行" Margin="3" Click="ExecuteButton_Click"/>
+            <Button x:Name="executeButton" DockPanel.Dock="Top" Content="テスト開始" Margin="3" Click="ExecuteButton_Click"/>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="3">
                 <TextBlock Text="ステータス: "/>
                 <TextBlock x:Name="statusText"/>
