@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace VOICEVOX_CPU_NUM_THREADS_TEST
 {
@@ -41,6 +42,7 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         private void SetStatus(string status)
         {
             statusText.Text = status;
+            this.Title = status;
         }
 
         /// <summary>
@@ -60,11 +62,21 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         /// <summary>
         /// 実行ボタンのイベント
         /// </summary>
-        private void ExecuteButton_Click(object sender, RoutedEventArgs e)
+        private async void ExecuteButton_Click(object sender, RoutedEventArgs e)
         {
             string enginePath = selectedEnginePath.Text;
 
+            Process.Start(enginePath);
 
+            int.TryParse(intervalSecondsTextBox.Text, out int interval);
+
+            for (int i = interval; i > 0; i--)
+            {
+                SetStatus($"次のテストまであと{i}秒");
+                await Task.Delay(TimeSpan.FromSeconds(1));
+            }
+
+            SetStatus("テスト開始");
         }
     }
 }
