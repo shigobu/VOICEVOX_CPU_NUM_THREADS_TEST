@@ -243,9 +243,12 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         /// <summary>
         /// 標準偏差
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="src"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// 参考
+        /// https://qiita.com/c60evaporator/items/59ad0dbebc53c742a4c9
+        /// </remarks>
         public double Stdev(List<long> src)
         {
             //平均値算出
