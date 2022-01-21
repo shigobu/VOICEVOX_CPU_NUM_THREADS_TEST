@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Net.Http;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace VOICEVOX_CPU_NUM_THREADS_TEST
 {
@@ -34,6 +35,11 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         /// </summary>
         static HttpClient httpClient;
 
+        /// <summary>
+        /// パスワードの一覧
+        /// </summary>
+        public ObservableCollection<ListDataSource> ResultDataList { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -42,6 +48,9 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
             SetTestThreadListFromMax();
 
             httpClient = new HttpClient();
+
+            ResultDataList = new ObservableCollection<ListDataSource>();
+            listView.DataContext = ResultDataList;
         }
 
         /// <summary>
@@ -93,6 +102,8 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
             this.IsEnabled = false;
             try
             {
+                ResultDataList.Clear();
+
                 string[] testThreadStrArray = testThreadListTextBox.Text.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 List<int> threadList = new List<int>();
                 foreach (string testThreadStr in testThreadStrArray)
@@ -126,12 +137,8 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                         }
 
                         SetStatus("テスト開始");
-                        await ExecuteTest();
-                    }
-                    catch (Exception)
-                    {
-
-                        throw;
+                        double averageTimeRequired = await ExecuteTest();
+                        ResultDataList.Add(new ListDataSource(thread, averageTimeRequired));
                     }
                     finally
                     {
@@ -145,6 +152,11 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                 }
                 SetStatus("テスト終了");
             }
+            catch (Exception ex)
+            {
+                SetStatus("エラー:" + ex.Message);
+                MessageBox.Show(this, ex.ToString(), "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             finally
             {
                 this.IsEnabled = true;
@@ -154,7 +166,7 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         /// <summary>
         /// テストを実行し、結果を表示します。
         /// </summary>
-        private async Task ExecuteTest()
+        private async Task<double> ExecuteTest()
         {
             string speakingText = "日本国民は正当に選挙された国会における代表者を通じて行動しわれらとわれらの子孫のために諸国民との協和";
             Stopwatch stopwatch = new Stopwatch();
@@ -174,7 +186,8 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                 await Task.Delay(100);
             }
 
-            //平均した結果をリストへ表示
+            return timeRequiredList.Average();
+
         }
 
         /// <summary>

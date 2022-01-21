@@ -32,10 +32,21 @@
                 <Button x:Name="saveButton" DockPanel.Dock="Right" Content="結果保存"/>
                 <TextBlock x:Name="statusText" VerticalAlignment="Center"/>
             </DockPanel>
-            
-            <ListBox Margin="3">
-                
-            </ListBox>
+
+            <ListView x:Name="listView" Margin="3" ItemsSource="{Binding Mode=OneWay}">
+                <ListView.Resources>
+                    <Style x:Key="myHeaderStyle" TargetType="GridViewColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                        <GridViewColumn Header="スレッド数" DisplayMemberBinding="{Binding ThreadNum}"/>
+                        <GridViewColumn Header="平均所要時間(ms)" DisplayMemberBinding="{Binding AverageTimeRequired}"/>
+                    </GridView>
+                </ListView.View>
+
+            </ListView>
         </DockPanel>
     </Grid>
 </Window>
