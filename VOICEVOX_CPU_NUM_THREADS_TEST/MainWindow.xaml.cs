@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Net.Http;
+using System.IO;
 
 namespace VOICEVOX_CPU_NUM_THREADS_TEST
 {
@@ -27,12 +29,19 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         /// </summary>
         Process process = null;
 
+        /// <summary>
+        /// 唯一のHttpクライアント
+        /// </summary>
+        static HttpClient httpClient;
+
         public MainWindow()
         {
             InitializeComponent();
 
             maxThreadTextBox.Text = Environment.ProcessorCount.ToString();
             SetTestThreadListFromMax();
+
+            httpClient = new HttpClient();
         }
 
         /// <summary>
@@ -54,6 +63,11 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
             {
                 process.Kill();
                 process = null;
+            }
+
+            if (httpClient != null)
+            {
+                httpClient.Dispose();
             }
         }
 
@@ -143,6 +157,32 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         private async Task ExecuteTest()
         {
             await Task.Delay(TimeSpan.FromSeconds(2));
+        }
+
+        /// <summary>
+        /// VOICEVOXへ音声合成の指示を送信します。
+        /// </summary>
+        /// <param name="text">読み上げ文字列</param>
+        /// <param name="speakerNum">話者番号</param>
+        static async void SendToVoiceVox(string text, int speakerNum = 0)
+        {
+            string speakerString = speakerNum.ToString();
+
+            var parameters = new Dictionary<string, string>()
+            {
+                { "text", text },
+                { "speaker", speakerString },
+            };
+            string encodedParamaters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
+            using (var resultAudioQuery = await httpClient.PostAsync(@"http://127.0.0.1:50021/audio_query?" + encodedParamaters, null))
+            {
+                string resBodyStr = await resultAudioQuery.Content.ReadAsStringAsync();
+
+                var content = new StringContent(resBodyStr, Encoding.UTF8, @"application/json");
+                var resultSynthesis = await httpClient.PostAsync(@"http://127.0.0.1:50021/synthesis?speaker=" + speakerString, content);
+                //音声の再生はしないので、即破棄。
+                resultSynthesis.Dispose();
+            }
         }
 
         /// <summary>
