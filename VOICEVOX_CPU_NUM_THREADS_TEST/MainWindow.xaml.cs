@@ -171,6 +171,7 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                 SetStatus($"{i + 1}回目 {result}ミリ秒");
 
                 stopwatch.Reset();
+                await Task.Delay(100);
             }
 
             //平均した結果をリストへ表示
