@@ -11,12 +11,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Net.Http;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace VOICEVOX_CPU_NUM_THREADS_TEST
 {
@@ -259,6 +259,42 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
             double variance = sum2 / src.Count - mean * mean;
             //標準偏差 = 分散の平方根
             return Math.Sqrt(variance);
+        }
+
+        /// <summary>
+        /// 保存ボタン
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "csvファイル(*.csv)|*.csv";
+            saveFileDialog.InitialDirectory = GetAssemblyDirectoryName();
+            saveFileDialog.FileName = "スレッド数違いによる所要時間の比較";
+
+            if (saveFileDialog.ShowDialog() ?? false)
+            {
+                using(StreamWriter stream = new StreamWriter(saveFileDialog.FileName, false, Encoding.GetEncoding("Shift_JIS")))
+                {
+                    stream.WriteLine($"スレッド数,平均所要時間,標準偏差");
+
+                    foreach (ListDataSource data in ResultDataList)
+                    {
+                        stream.WriteLine($"{data.ThreadNum},{data.AverageTimeRequired},{data.StandardDeviation}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 自分自身のあるフォルダを返します。
+        /// </summary>
+        /// <returns></returns>
+        private string GetAssemblyDirectoryName()
+        {
+            Assembly myAssembly = Assembly.GetExecutingAssembly();
+            return Path.GetDirectoryName(myAssembly.Location);
         }
     }
 }

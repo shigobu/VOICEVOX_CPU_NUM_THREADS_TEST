@@ -29,7 +29,7 @@
             <Button x:Name="executeButton" DockPanel.Dock="Top" Content="テスト開始" Margin="3" Click="ExecuteButton_Click"/>
             <DockPanel DockPanel.Dock="Top" Margin="3">
                 <TextBlock DockPanel.Dock="Left" Text="ステータス: " VerticalAlignment="Center"/>
-                <Button x:Name="saveButton" DockPanel.Dock="Right" Content="結果保存"/>
+                <Button x:Name="saveButton" DockPanel.Dock="Right" Content="結果保存" Click="SaveButton_Click"/>
                 <TextBlock x:Name="statusText" VerticalAlignment="Center"/>
             </DockPanel>
 
