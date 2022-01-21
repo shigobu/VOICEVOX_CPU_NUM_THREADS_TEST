@@ -27,10 +27,11 @@
                 <TextBox x:Name="testThreadListTextBox" Margin="3"/>
             </DockPanel>
             <Button x:Name="executeButton" DockPanel.Dock="Top" Content="テスト開始" Margin="3" Click="ExecuteButton_Click"/>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="3">
-                <TextBlock Text="ステータス: "/>
-                <TextBlock x:Name="statusText"/>
-            </StackPanel>
+            <DockPanel DockPanel.Dock="Top" Margin="3">
+                <TextBlock DockPanel.Dock="Left" Text="ステータス: " VerticalAlignment="Center"/>
+                <Button x:Name="saveButton" DockPanel.Dock="Right" Content="結果保存"/>
+                <TextBlock x:Name="statusText" VerticalAlignment="Center"/>
+            </DockPanel>
             
             <ListBox Margin="3">
                 
