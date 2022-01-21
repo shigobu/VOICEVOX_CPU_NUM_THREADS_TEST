@@ -43,6 +43,7 @@
                     <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
                         <GridViewColumn Header="スレッド数" DisplayMemberBinding="{Binding ThreadNum}"/>
                         <GridViewColumn Header="平均所要時間(ms)" DisplayMemberBinding="{Binding AverageTimeRequired}"/>
+                        <GridViewColumn Header="標準偏差" DisplayMemberBinding="{Binding StandardDeviation}"/>
                     </GridView>
                 </ListView.View>
 

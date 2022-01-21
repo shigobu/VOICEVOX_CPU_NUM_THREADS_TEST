@@ -137,8 +137,7 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                         }
 
                         SetStatus("テスト開始");
-                        double averageTimeRequired = await ExecuteTest();
-                        ResultDataList.Add(new ListDataSource(thread, averageTimeRequired));
+                        await ExecuteTest(thread);
                     }
                     finally
                     {
@@ -166,7 +165,7 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
         /// <summary>
         /// テストを実行し、結果を表示します。
         /// </summary>
-        private async Task<double> ExecuteTest()
+        private async Task ExecuteTest(int numThread)
         {
             string speakingText = "日本国民は正当に選挙された国会における代表者を通じて行動しわれらとわれらの子孫のために諸国民との協和";
             Stopwatch stopwatch = new Stopwatch();
@@ -186,8 +185,8 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                 await Task.Delay(100);
             }
 
-            return timeRequiredList.Average();
-
+            double averageTimeRequired = timeRequiredList.Average();
+            ResultDataList.Add(new ListDataSource(numThread, timeRequiredList.Average(), Stdev(timeRequiredList)));
         }
 
         /// <summary>
@@ -239,6 +238,24 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
             {
                 testThreadListTextBox.Text += i.ToString() + ",";
             }
+        }
+
+        /// <summary>
+        /// 標準偏差
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="src"></param>
+        /// <returns></returns>
+        public double Stdev(List<long> src)
+        {
+            //平均値算出
+            double mean = src.Average();
+            //自乗和算出
+            double sum2 = src.Select(a => a * a).Sum();
+            //分散 = 自乗和 / 要素数 - 平均値^2
+            double variance = sum2 / src.Count - mean * mean;
+            //標準偏差 = 分散の平方根
+            return Math.Sqrt(variance);
         }
     }
 }
