@@ -14,7 +14,7 @@
                 <TextBox x:Name="selectedEnginePath" Margin="3"/>
             </DockPanel>
             <DockPanel DockPanel.Dock="Top">
-                <TextBlock DockPanel.Dock="Left" Text="エンジンスレッドの優先度" VerticalAlignment="Center" Margin="3"/>
+                <TextBlock DockPanel.Dock="Left" Text="エンジンプロセスの優先度" VerticalAlignment="Center" Margin="3"/>
                 <ComboBox x:Name="priorityComboBox" DisplayMemberPath="Name" SelectedValuePath="Class" Margin="3"/>
             </DockPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
