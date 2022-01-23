@@ -4,13 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Net.Http;
@@ -51,6 +45,19 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
 
             ResultDataList = new ObservableCollection<ListDataSource>();
             listView.DataContext = ResultDataList;
+
+            //優先度コンボボックスの中身作成
+            PriorityComboItem[] comboItems = new PriorityComboItem[]
+            {
+                new PriorityComboItem("リアルタイム", ProcessPriorityClass.RealTime),
+                new PriorityComboItem("高", ProcessPriorityClass.High),
+                new PriorityComboItem("通常以上", ProcessPriorityClass.AboveNormal),
+                new PriorityComboItem("通常", ProcessPriorityClass.Normal),
+                new PriorityComboItem("通常以下", ProcessPriorityClass.BelowNormal),
+                new PriorityComboItem("低", ProcessPriorityClass.Idle)
+            };
+            priorityComboBox.ItemsSource = comboItems;
+            priorityComboBox.SelectedValue = ProcessPriorityClass.Normal;
         }
 
         /// <summary>
@@ -128,6 +135,7 @@ namespace VOICEVOX_CPU_NUM_THREADS_TEST
                         startInfo.UseShellExecute = false;
 
                         process = Process.Start(startInfo);
+                        process.PriorityClass = ((PriorityComboItem)priorityComboBox.SelectedItem).Class;
 
                         int.TryParse(intervalSecondsTextBox.Text, out int interval);
                         for (int i = interval; i > 0; i--)

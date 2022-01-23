@@ -13,6 +13,10 @@
                 <Button x:Name="selectEnginePathButton" DockPanel.Dock="Right" Content="選択" Margin="3" Click="SelectEnginePathButton_Click"/>
                 <TextBox x:Name="selectedEnginePath" Margin="3"/>
             </DockPanel>
+            <DockPanel DockPanel.Dock="Top">
+                <TextBlock DockPanel.Dock="Left" Text="エンジンスレッドの優先度" VerticalAlignment="Center" Margin="3"/>
+                <ComboBox x:Name="priorityComboBox" DisplayMemberPath="Name" SelectedValuePath="Class" Margin="3"/>
+            </DockPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <TextBlock Text="最大スレッド数" VerticalAlignment="Center" Margin="3"/>
                 <TextBox x:Name="maxThreadTextBox" Width="50" Margin="3" TextAlignment="Right" KeyUp="MaxThreadTextBox_KeyUp"/>
